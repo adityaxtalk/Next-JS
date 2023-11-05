@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { GoSearch } from "react-icons/go";
 import { GiPartyPopper } from "react-icons/gi";
 import FilterCard from "./FilterCard";
@@ -12,13 +12,13 @@ import { filterData } from "../redux/features/dataSlice";
 
 const Main = () => {
   const dispatch: AppDispatch = useDispatch();
-  const searchRef = useRef(null);
+  const [searchText, setSearchText] = useState('');
   const data = useSelector((state: RootState) => state.dataReducer);
   useEffect(() => {
     fetchAPIData(dispatch);
   }, [dispatch]);
   const handleSearch= () => {
-    dispatch(filterData(searchRef.current.value));
+    dispatch(filterData(searchText));
   }
   return (
     <>
@@ -31,8 +31,9 @@ const Main = () => {
                 <input
                   type="text"
                   placeholder="Search"
+                  value={searchText}
                   className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none pl-10 "
-                  ref={searchRef}
+                  onChange={(e)=> setSearchText(e.target.value)}
                 />
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <GoSearch className="text-gray-500" />
